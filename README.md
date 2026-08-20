@@ -36,7 +36,7 @@ User Input (URL)
 │        (geminiProvider.js)           │
 └──────┬───────────────────────────────┘
        │ Sends prompt + cleaned content
-       │ to model (e.g. gemini-2.5-flash)
+       │ to model (e.g. gemini-3.5-flash)
        ▼
 ┌──────────────┐
 │  Gemini API  │
@@ -99,7 +99,7 @@ AI_PROVIDER=gemini
 # Google Gemini Configurations
 # Obtain key: https://aistudio.google.com/
 GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MODEL=gemini-3.5-flash
 ```
 
 ---
@@ -119,7 +119,7 @@ This automatically runs npm installs for the **root**, the **client**, and the *
 
 ### 2. Configure environment variables
 1. Open the `server/` directory.
-2. Locate the `.env` file (or duplicate `.env.example` into a new `.env` file).
+2. Locate the `.env` .
 3. Replace the `GEMINI_API_KEY` placeholder with your actual Gemini API key from Google AI Studio.
 
 ### 3. Start the application
@@ -135,31 +135,3 @@ Open your browser to [http://localhost:5173](http://localhost:5173) to run the a
 
 ---
 
-## Swapping AI Providers (How It Works)
-
-The application separates code dependencies strictly. To replace Gemini with another provider (e.g. OpenAI or Groq):
-
-1. **Create the Provider Class**: Add a new provider file inside `server/services/ai/providers/` (e.g. `openaiProvider.js`):
-   ```javascript
-   class OpenAIProvider {
-     async summarize(text) {
-       // Call OpenAI SDK here and return text summary
-     }
-   }
-   module.exports = OpenAIProvider;
-   ```
-2. **Update the Router**: Open `server/services/ai/aiService.js`, import your new provider, and add it to the initialization block:
-   ```javascript
-   const OpenAIProvider = require('./providers/openaiProvider');
-   
-   // In initProvider():
-   case 'openai':
-     this.provider = new OpenAIProvider();
-     break;
-   ```
-3. **Change the Environment Variable**: In `server/.env`, modify:
-   ```env
-   AI_PROVIDER=openai
-   ```
-
-No other files (API endpoints, components, or client services) will need to be touched.
